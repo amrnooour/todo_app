@@ -8,7 +8,7 @@ class TodoDm{
    late bool isDone;
    static const String collectionName ="todos";
 
-  TodoDm(this.id,this.title,this.description, this.date, this.isDone);
+  TodoDm({required this.id,required this.title,required this.description,required this.date,required this.isDone});
    TodoDm.fromJson(Map json){
       id = json["id"];
       title = json["title"];

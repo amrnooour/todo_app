@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/ui/screens/auth/login/login_screen.dart';
 import 'package:todo_app/ui/screens/home/home_screen.dart';
 import 'package:todo_app/ui/utils/app_assets.dart';
 
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 2),(){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
     });
   }
   Widget build(BuildContext context) {

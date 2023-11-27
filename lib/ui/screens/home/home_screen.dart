@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/models/app_user.dart';
+import 'package:todo_app/ui/providers/list_providers.dart';
+import 'package:todo_app/ui/screens/auth/login/login_screen.dart';
 import 'package:todo_app/ui/screens/bottom_sheets/add_bottom_sheet.dart';
 import 'package:todo_app/ui/screens/home/tabs/list/list_tab.dart';
 import 'package:todo_app/ui/screens/home/tabs/settings/settings_tab.dart';
@@ -13,8 +17,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentSelectedTabIndex =0;
+  late ListProvider provider;
   @override
   Widget build(BuildContext context) {
+    provider =Provider.of(context);
     return Scaffold(
       appBar: buildAppBar(),
       body: currentSelectedTabIndex ==0 ? ListTab() : SettingsTab(),
@@ -25,8 +31,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   PreferredSizeWidget buildAppBar(){
-    return AppBar(title: Text("To Do List"),
+    return AppBar(
+      title: Text("Welcome ${AppUser.currentUser!.username}"),
     toolbarHeight: MediaQuery.of(context).size.height * .1,
+      actions: [
+        InkWell(
+            onTap: (){
+              AppUser.currentUser = null;
+              provider.todos.clear();
+              Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+            },
+            child: Icon(Icons.logout))
+      ],
     );
   }
 

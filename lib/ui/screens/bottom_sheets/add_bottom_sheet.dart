@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/models/app_user.dart';
 import 'package:todo_app/models/todo_dm.dart';
 import 'package:todo_app/ui/providers/list_providers.dart';
 import 'package:todo_app/ui/utils/app_colors.dart';
@@ -51,19 +52,19 @@ class _AddBottomSheetState extends State<AddBottomSheet> {
     );
   }
 
-  void addToDoFireStore() {
-    CollectionReference todosCollectionRef = FirebaseFirestore.instance.collection(TodoDm.collectionName);
+  void addToDoFireStore() async{
+    CollectionReference todosCollectionRef =
+    AppUser.collection().doc(AppUser.currentUser!.id).collection(TodoDm.collectionName);
     DocumentReference newEmptyDoc = todosCollectionRef.doc();
-    newEmptyDoc.set({
+    await newEmptyDoc.set({
       "id" : newEmptyDoc.id,
       "title" : titleController.text,
       "description" : descriptionController.text,
-      "date" : selectedDate,
+      "date" : selectedDate.millisecondsSinceEpoch,
       "isDone" : false,
-    }).timeout(Duration(microseconds: 300),onTimeout: (){
-      provider.refreshTodosList();
-      Navigator.pop(context);
     });
+    provider.refreshTodosList();
+    Navigator.pop(context);
   }
 
   void showMyDatePicker() async{
