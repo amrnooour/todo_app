@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo_app/models/todo_dm.dart';
 import 'package:todo_app/ui/utils/app_colors.dart';
 import 'package:todo_app/ui/utils/app_theme.dart';
 
 class ToDoWidget extends StatelessWidget {
-  const ToDoWidget({Key? key}) : super(key: key);
+   final TodoDm model;
+   const ToDoWidget({Key? key,required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +31,15 @@ class ToDoWidget extends StatelessWidget {
           height: MediaQuery.of(context).size.height*.13,
           child: Row(
             children: [
-              VerticalDivider(),
-              SizedBox(width: 12,),
+              const VerticalDivider(),
+              const SizedBox(width: 12,),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text("Play BasketBall",style: AppTheme.taskTitleTextStyle,),
-                    Text("Description",style: AppTheme.taskDescriptionTextStyle,textAlign: TextAlign.start,),
+                    Text(model.title,style: AppTheme.taskTitleTextStyle,),
+                    Text(model.description,style: AppTheme.taskDescriptionTextStyle,textAlign: TextAlign.start,),
                   ],
                 ),
               ),

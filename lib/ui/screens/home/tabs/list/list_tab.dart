@@ -1,18 +1,37 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/models/todo_dm.dart';
+import 'package:todo_app/ui/providers/list_providers.dart';
 import 'package:todo_app/ui/screens/home/tabs/list/todo_widget.dart';
 import 'package:todo_app/ui/utils/app_colors.dart';
 
-class ListTab extends StatelessWidget {
-  const ListTab({Key? key}) : super(key: key);
+class ListTab extends StatefulWidget {
+  @override
+  State<ListTab> createState() => _ListTabState();
+}
+
+class _ListTabState extends State<ListTab> {
+  late ListProvider provider;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.refreshTodosList();
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
+    provider =Provider.of(context);
     return Column(
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height*.12,
+          height: MediaQuery.of(context).size.height*.14,
           child: Stack(children: [
             Column(
               children: [
@@ -23,10 +42,13 @@ class ListTab extends StatelessWidget {
               ],
             ),
             CalendarTimeline(
-              initialDate: DateTime.now(),
+              initialDate: provider.selectedDate,
               firstDate: DateTime.now().subtract(Duration(days: 365)),
               lastDate: DateTime.now().add(Duration(days: 365)),
-              onDateSelected: (date) => print(date),
+              onDateSelected: (date) {
+                provider.selectedDate =date;
+                provider.refreshTodosList();
+              },
               leftMargin: 20,
               monthColor: AppColors.white,
               dayColor: AppColors.primiary,
@@ -40,9 +62,11 @@ class ListTab extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-              itemCount: 10, itemBuilder: (context, index) => ToDoWidget()),
+              itemCount: provider.todos.length, itemBuilder: (context, index) => ToDoWidget(model: provider.todos[index],)),
         ),
       ],
     );
   }
+
+
 }
